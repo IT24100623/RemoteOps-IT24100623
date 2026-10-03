@@ -1,0 +1,6 @@
+all:
+	gcc agent_623.c -o agent_623 -pthread
+	gcc controller_623.c -o controller_623
+
+clean:
+	rm -f agent_623 controller_623

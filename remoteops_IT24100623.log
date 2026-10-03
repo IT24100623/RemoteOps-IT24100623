@@ -1,0 +1,119 @@
+[2026-10-03 11:12:21] Controller connected from 127.0.0.1
+[2026-10-03 11:12:21] Command received: AUTH
+[2026-10-03 11:12:21] Authentication successful
+[2026-10-03 11:12:21] Command received: SYSINFO
+[2026-10-03 11:12:21] Command received: LISTPROC
+[2026-10-03 11:12:21] Command received: EXEC DATE
+[2026-10-03 11:12:21] Command received: EXEC LS
+[2026-10-03 11:12:21] Command received: PUT test.txt 30
+[2026-10-03 11:12:21] File uploaded: test.txt (30 bytes)
+[2026-10-03 11:12:21] Command received: GET test.txt
+[2026-10-03 11:12:21] File downloaded: test.txt (30 bytes)
+[2026-10-03 11:12:21] Command received: MONITOR START 9500
+[2026-10-03 11:12:21] UDP monitoring started
+[2026-10-03 11:12:26] Command received: MONITOR STOP
+[2026-10-03 11:12:28] UDP monitoring stopped
+[2026-10-03 11:12:28] Command received: QUIT
+[2026-10-03 11:12:28] Client requested graceful disconnect
+[2026-10-03 11:25:06] Controller connected from 127.0.0.1
+[2026-10-03 11:25:06] Command received: AUTH
+[2026-10-03 11:25:06] Authentication successful
+[2026-10-03 11:25:06] Command received: SYSINFO
+[2026-10-03 11:25:06] Command received: LISTPROC
+[2026-10-03 11:25:06] Command received: EXEC DATE
+[2026-10-03 11:25:06] Command received: EXEC LS
+[2026-10-03 11:25:06] Command received: PUT test.txt 30
+[2026-10-03 11:25:07] File uploaded: test.txt (30 bytes)
+[2026-10-03 11:25:07] Command received: GET test.txt
+[2026-10-03 11:25:07] File downloaded: test.txt (30 bytes)
+[2026-10-03 11:25:07] Command received: MONITOR START 9500
+[2026-10-03 11:25:16] Controller connected from 127.0.0.1
+[2026-10-03 11:25:16] Command received: AUTH
+[2026-10-03 11:25:16] Authentication successful
+[2026-10-03 11:25:16] Command received: SYSINFO
+[2026-10-03 11:25:16] Command received: LISTPROC
+[2026-10-03 11:25:16] Command received: EXEC DATE
+[2026-10-03 11:25:16] Command received: EXEC LS
+[2026-10-03 11:25:16] Command received: PUT test.txt 30
+[2026-10-03 11:25:16] File uploaded: test.txt (30 bytes)
+[2026-10-03 11:25:16] Command received: GET test.txt
+[2026-10-03 11:25:16] File downloaded: test.txt (30 bytes)
+[2026-10-03 11:25:16] Controller disconnected
+[2026-10-03 11:25:23] Controller connected from 127.0.0.1
+[2026-10-03 11:25:23] Command received: AUTH
+[2026-10-03 11:25:23] Authentication successful
+[2026-10-03 11:25:23] Command received: SYSINFO
+[2026-10-03 11:25:23] Command received: LISTPROC
+[2026-10-03 11:25:23] Command received: EXEC DATE
+[2026-10-03 11:25:23] Command received: EXEC LS
+[2026-10-03 11:25:23] Command received: PUT test.txt 30
+[2026-10-03 11:25:23] File uploaded: test.txt (30 bytes)
+[2026-10-03 11:25:23] Command received: GET test.txt
+[2026-10-03 11:25:23] File downloaded: test.txt (30 bytes)
+[2026-10-03 11:25:23] Controller disconnected
+[2026-10-03 11:25:30] Controller connected from 127.0.0.1
+[2026-10-03 11:25:30] Command received: AUTH
+[2026-10-03 11:25:30] Authentication successful
+[2026-10-03 11:25:30] Command received: SYSINFO
+[2026-10-03 11:25:30] Command received: LISTPROC
+[2026-10-03 11:25:30] Command received: EXEC DATE
+[2026-10-03 11:25:30] Command received: EXEC LS
+[2026-10-03 11:25:30] Command received: PUT test.txt 30
+[2026-10-03 11:25:30] File uploaded: test.txt (30 bytes)
+[2026-10-03 11:25:30] Command received: GET test.txt
+[2026-10-03 11:25:30] File downloaded: test.txt (30 bytes)
+[2026-10-03 11:25:30] Controller disconnected
+[2026-10-03 11:25:34] Controller connected from 127.0.0.1
+[2026-10-03 11:25:34] Command received: AUTH
+[2026-10-03 11:25:34] Authentication successful
+[2026-10-03 11:25:34] Command received: SYSINFO
+[2026-10-03 11:25:34] Command received: LISTPROC
+[2026-10-03 11:25:34] Command received: EXEC DATE
+[2026-10-03 11:25:34] Command received: EXEC LS
+[2026-10-03 11:25:34] Command received: PUT test.txt 30
+[2026-10-03 11:25:34] File uploaded: test.txt (30 bytes)
+[2026-10-03 11:25:34] Command received: GET test.txt
+[2026-10-03 11:25:34] File downloaded: test.txt (30 bytes)
+[2026-10-03 11:25:34] Controller disconnected
+[2026-10-03 11:34:06] Controller disconnected
+[2026-10-03 11:34:54] Controller connected from 127.0.0.1
+[2026-10-03 11:35:19] Controller disconnected
+[2026-10-03 11:36:27] Controller connected from 127.0.0.1
+[2026-10-03 11:36:35] Controller disconnected
+[2026-10-03 11:36:49] Controller connected from 127.0.0.1
+[2026-10-03 11:38:45] Controller disconnected
+[2026-10-03 11:39:05] Controller connected from 127.0.0.1
+[2026-10-03 11:39:15] Command received: AUTH
+[2026-10-03 11:39:15] Authentication successful
+[2026-10-03 11:39:49] Controller connected from 127.0.0.1
+[2026-10-03 11:39:57] Command received: AUTH
+[2026-10-03 11:39:57] Authentication successful
+[2026-10-03 11:41:15] Controller connected from 127.0.0.1
+[2026-10-03 11:41:17] Command received: AUTH
+[2026-10-03 11:41:17] Authentication successful
+[2026-10-03 11:41:33] Controller connected from 127.0.0.1
+[2026-10-03 11:41:35] Command received: AUTH
+[2026-10-03 11:41:35] Authentication successful
+[2026-10-03 11:41:40] Controller connected from 127.0.0.1
+[2026-10-03 11:41:41] Command received: AUTH
+[2026-10-03 11:41:41] Authentication successful
+[2026-10-03 11:44:14] Controller connected from 127.0.0.1
+[2026-10-03 11:44:16] Command received: AUTH
+[2026-10-03 11:44:16] Authentication successful
+[2026-10-03 11:44:19] Controller connected from 127.0.0.1
+[2026-10-03 11:44:20] Command received: AUTH
+[2026-10-03 11:44:20] Authentication successful
+[2026-10-03 11:44:22] Controller connected from 127.0.0.1
+[2026-10-03 11:44:24] Command received: AUTH
+[2026-10-03 11:44:24] Authentication successful
+[2026-10-03 11:44:26] Controller connected from 127.0.0.1
+[2026-10-03 11:44:27] Command received: AUTH
+[2026-10-03 11:44:27] Authentication successful
+[2026-10-03 11:44:29] Controller connected from 127.0.0.1
+[2026-10-03 11:44:30] Command received: AUTH
+[2026-10-03 11:44:30] Authentication successful
+[2026-10-03 11:46:00] Controller disconnected
+[2026-10-03 11:46:03] Controller disconnected
+[2026-10-03 11:46:05] Controller disconnected
+[2026-10-03 11:46:07] Controller disconnected
+[2026-10-03 11:46:09] Controller disconnected

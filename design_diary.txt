@@ -1,0 +1,61 @@
+DESIGN DIARY – REMOTEOPS
+Registration Number: IT24100623
+Module: IE3090 – Network Programming
+
+1. Initial Design Decision
+I decided to implement RemoteOps using a TCP client/server architecture. The Agent acts as the server and the Controller acts as the client. TCP is used for commands, responses, authentication, and file transfers because reliable and ordered delivery is required.
+
+2. Personalisation
+The implementation was personalised using my registration number IT24100623.
+
+Port: 9410
+SID: 3260
+Authentication Token: OPS-0623
+Agent File: agent_623.c
+Controller File: controller_623.c
+Makefile: Makefile_623
+Log File: remoteops_IT24100623.log
+Storage Path: ./agentfiles/IT24100623/
+
+3. Authentication
+I implemented authentication as the first required command on each new connection. Other commands are not processed until the correct token is received.
+
+4. System Monitoring
+SYSINFO was implemented to return CPU load, memory usage, and uptime. LISTPROC was implemented using the Linux ps command through popen().
+
+5. Restricted Command Execution
+The EXEC command was restricted to the required whitelist only:
+DATE, UPTIME, DISKFREE, HOSTNAME, and WHOAMI.
+Other commands are rejected for security reasons.
+
+6. File Transfer
+PUT and GET were implemented using the file size provided in the protocol. I used loops to ensure that the exact number of file bytes is received or transmitted.
+
+7. UDP Monitoring
+A separate UDP monitoring mechanism was implemented. MONITOR START begins sending periodic system statistics to the Controller and MONITOR STOP stops the monitoring process. The monitoring interval used is 2 seconds.
+
+8. Concurrency
+POSIX threads were selected as the concurrency model. Each accepted Controller connection is handled by a separate thread so that several Controllers can be connected at the same time.
+
+9. Logging
+A personalised log file was implemented to record connections, commands, authentication events, file transfers, monitoring activity, and disconnects with timestamps.
+
+10. Problems and Fixes
+During development, I encountered a warning related to the write_log() function because it was used before its declaration. I fixed this by adding a function prototype before other functions.
+
+I also had to carefully handle TCP framing because a single recv() call is not guaranteed to contain one complete command. A receive-line function was used to read until the newline character.
+
+For file transfers, I used remaining-byte counters to prevent incomplete PUT and GET transfers.
+
+11. Final Testing
+The completed implementation was tested for:
+- Successful and failed authentication
+- SYSINFO
+- LISTPROC
+- Allowed and rejected EXEC commands
+- PUT file upload
+- GET file download
+- UDP MONITOR START and STOP
+- QUIT
+- Logging
+- Multiple simultaneous Controller connections

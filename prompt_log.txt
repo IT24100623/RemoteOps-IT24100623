@@ -1,0 +1,294 @@
+PROMPT LOG
+RemoteOps – Remote System Monitoring and Management Tool
+
+Module: IE3090 – Network Programming
+Registration Number: IT24100623
+AI Tool Used: ChatGPT
+
+
+1. Understanding the Assignment Requirements
+
+Prompt:
+“Explain the RemoteOps assignment requirements step by step and identify the main implementation components.”
+
+Purpose:
+To obtain a clear understanding of the required functionality before beginning implementation.
+
+How the AI Output Was Used:
+The response was used to identify the major components of the system, including the Agent, Controller, TCP command channel, UDP monitoring channel, authentication, file transfer, logging, personalisation, and concurrency requirements.
+
+Verification / Changes:
+The explanation was cross-checked against the official assignment brief before implementation. Only requirements explicitly specified in the brief were included in the final system.
+
+
+2. Calculating Personalised Values
+
+Prompt:
+“Calculate the required personalised values for registration number IT24100623 according to the assignment formulas.”
+
+Purpose:
+To avoid errors when deriving the personalised port number, SID, authentication token, file names, log file name, and storage path.
+
+How the AI Output Was Used:
+The calculated values were used as implementation parameters.
+
+Verified Values:
+Registration Number: IT24100623
+Agent TCP Port: 9410
+Session ID (SID): 3260
+Authentication Token: OPS-0623
+Agent Source File: agent_623.c
+Controller Source File: controller_623.c
+Makefile: Makefile_623
+Log File: remoteops_IT24100623.log
+Storage Path: ./agentfiles/IT24100623/
+
+Verification / Changes:
+Each value was manually checked using the formulas provided in the assignment brief before being used in the source code.
+
+
+3. Initial TCP Client/Server Implementation
+
+Prompt:
+“Explain how to implement a basic TCP server and TCP client in C using the BSD sockets API.”
+
+Purpose:
+To review the basic sequence of socket programming functions required for the initial Agent and Controller connection.
+
+How the AI Output Was Used:
+The explanation was used as guidance for implementing socket(), bind(), listen(), accept(), and connect().
+
+Verification / Changes:
+The implementation was compiled using gcc and tested locally using 127.0.0.1 and the personalised TCP port 9410. The code was adjusted to match the structure and naming conventions used in the project.
+
+
+4. Authentication Implementation
+
+Prompt:
+“How can the Agent require AUTH as the first command and validate the personalised token before accepting other commands?”
+
+Purpose:
+To implement the authentication requirement defined in the protocol.
+
+How the AI Output Was Used:
+The suggested logic was used to create an authentication state for each Controller session.
+
+Verification / Changes:
+Both valid and invalid authentication attempts were tested. The successful response and failure response were checked to ensure that they included the correct SID.
+
+
+5. TCP Line Framing
+
+Prompt:
+“How should a line-based TCP protocol be handled when recv() may return partial data or more than one message?”
+
+Purpose:
+To understand how TCP stream behaviour affects the command protocol.
+
+How the AI Output Was Used:
+The explanation was used to implement a receive-line mechanism that reads data until a newline character is reached.
+
+Verification / Changes:
+The implementation was tested with multiple commands. This logic was retained because the assignment requires commands and responses to be newline terminated.
+
+
+6. SYSINFO Implementation
+
+Prompt:
+“How can CPU load, memory usage, and system uptime be obtained in C on Linux for the SYSINFO command?”
+
+Purpose:
+To identify suitable Linux system information sources for implementing SYSINFO.
+
+How the AI Output Was Used:
+The response guided the use of /proc/loadavg and sysinfo() to obtain system statistics.
+
+Verification / Changes:
+The returned values were tested during program execution and the response format was adjusted to match the required protocol format with SID:3260.
+
+
+7. LISTPROC Implementation
+
+Prompt:
+“How can LISTPROC return a simple snapshot of running Linux processes using C?”
+
+Purpose:
+To implement the required process listing functionality.
+
+How the AI Output Was Used:
+The response suggested using popen() with the Linux ps command.
+
+Verification / Changes:
+The command output was tested on the Ubuntu virtual machine and formatted as a comma-separated response before being sent to the Controller.
+
+
+8. EXEC Whitelist Implementation
+
+Prompt:
+“How can the EXEC command be restricted to DATE, UPTIME, DISKFREE, HOSTNAME, and WHOAMI only?”
+
+Purpose:
+To implement the fixed command whitelist required by the specification.
+
+How the AI Output Was Used:
+The suggested conditional structure was used to map the permitted protocol commands to Linux commands.
+
+Verification / Changes:
+Each allowed command was tested individually. An invalid command, EXEC LS, was also tested and confirmed to return ERR 002 COMMAND_NOT_ALLOWED SID:3260.
+
+
+9. PUT File Upload
+
+Prompt:
+“How should the PUT command receive exactly the announced number of file bytes over TCP?”
+
+Purpose:
+To correctly implement file upload while accounting for TCP stream behaviour.
+
+How the AI Output Was Used:
+The response guided the use of a remaining-byte counter and repeated recv() calls until the complete file was received.
+
+Verification / Changes:
+A test file was uploaded and confirmed to be stored in ./agentfiles/IT24100623/. The successful response was also checked against the required protocol format.
+
+
+10. GET File Download
+
+Prompt:
+“How should the GET command send the file size followed by exactly that number of file bytes?”
+
+Purpose:
+To correctly implement file download.
+
+How the AI Output Was Used:
+The response guided the implementation of file-size calculation and repeated file reads and sends.
+
+Verification / Changes:
+The downloaded file was compared with the original using the Linux cmp command. No differences were reported, confirming byte-for-byte integrity.
+
+
+11. UDP Monitoring
+
+Prompt:
+“How can MONITOR START and MONITOR STOP be implemented using a UDP socket and a separate thread?”
+
+Purpose:
+To implement periodic monitoring without blocking the TCP command connection.
+
+How the AI Output Was Used:
+The suggested approach was used to create a UDP monitoring thread that periodically sends SYSINFO-style datagrams.
+
+Verification / Changes:
+A monitoring interval of two seconds was selected. The Controller was tested to receive multiple datagrams, and MONITOR STOP was verified to stop the stream correctly.
+
+
+12. Logging
+
+Prompt:
+“How can connections, commands, file transfers, and disconnect events be recorded with timestamps in a log file in C?”
+
+Purpose:
+To implement the required personalised logging mechanism.
+
+How the AI Output Was Used:
+The response guided the creation of a reusable logging function using time(), localtime(), strftime(), and file append mode.
+
+Verification / Changes:
+The resulting remoteops_IT24100623.log file was manually inspected to confirm that timestamps and relevant events were recorded correctly.
+
+
+13. Debugging the write_log() Warning
+
+Prompt:
+“Why does gcc report an implicit declaration and conflicting type warning for write_log(), and how should it be fixed?”
+
+Purpose:
+To understand and correct a compiler warning encountered during implementation.
+
+How the AI Output Was Used:
+The explanation identified that write_log() was being called before the compiler had seen its declaration.
+
+Verification / Changes:
+A function prototype was added before functions that call write_log(). The Agent was recompiled and the warning was resolved.
+
+
+14. Graceful QUIT Handling
+
+Prompt:
+“How should the QUIT command stop active monitoring and close the TCP connection cleanly?”
+
+Purpose:
+To correctly implement graceful session termination.
+
+How the AI Output Was Used:
+The response guided the sequence of stopping the monitoring thread, returning the required OK BYE response, recording the event, and closing the connection.
+
+Verification / Changes:
+The QUIT command was tested and the Agent closed the Controller session without terminating the server unexpectedly.
+
+
+15. Concurrency with POSIX Threads
+
+Prompt:
+“How can the Agent handle at least five simultaneous Controller connections using POSIX threads?”
+
+Purpose:
+To satisfy the assignment concurrency requirement.
+
+How the AI Output Was Used:
+The response was used to understand how to create a separate client-handling thread for each accepted Controller connection.
+
+Verification / Changes:
+The Agent was compiled with the -pthread option. Multiple Controller connections were opened simultaneously and authenticated successfully while remaining connected.
+
+
+16. Makefile Preparation
+
+Prompt:
+“How should a personalised Makefile be written to compile agent_623.c with pthread support and controller_623.c?”
+
+Purpose:
+To create the required personalised build file.
+
+How the AI Output Was Used:
+The suggested targets were used to prepare Makefile_623.
+
+Verification / Changes:
+The Makefile was tested with GNU Make and confirmed to compile both programs successfully.
+
+
+17. README and Documentation Structure
+
+Prompt:
+“What information should be included in the RemoteOps README according to the assignment requirements?”
+
+Purpose:
+To organise the project documentation clearly.
+
+How the AI Output Was Used:
+The response was used as a structure for documenting personalised values, compilation instructions, execution steps, supported commands, storage paths, and testing procedures.
+
+Verification / Changes:
+The README content was checked against the actual implementation so that only implemented and tested functionality was documented.
+
+
+18. Design Diary Preparation
+
+Prompt:
+“Help organise the key implementation decisions, technical problems, and solutions into a short design diary.”
+
+Purpose:
+To prepare the required development-process evidence.
+
+How the AI Output Was Used:
+The response was used as a drafting aid to organise the development decisions into a logical structure.
+
+Verification / Changes:
+The diary was revised to reflect the actual implementation decisions, encountered compiler warning, TCP framing considerations, file-transfer byte counting, and concurrency approach used in the project.
+
+
+Overall Use of AI
+
+AI was used as a support tool for understanding requirements, reviewing socket-programming concepts, identifying implementation approaches, debugging compiler issues, and organising documentation.
+
+AI-generated suggestions were not accepted without verification. Code and explanations were reviewed, compiled, tested, and modified where necessary to match the assignment specification and the behaviour of the implemented RemoteOps system.

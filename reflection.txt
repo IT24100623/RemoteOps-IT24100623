@@ -1,0 +1,15 @@
+STRUCTURED REFLECTION
+RemoteOps – Remote System Monitoring and Management Tool
+
+Module: IE3090 – Network Programming
+Registration Number: IT24100623
+
+During the development of the RemoteOps assignment, I used ChatGPT as a supporting tool at several stages of the implementation. I mainly used it to clarify the assignment requirements, review socket-programming concepts, understand TCP framing, obtain guidance for implementing authentication, file transfer, UDP monitoring, logging, and concurrency, and to help organise the project documentation. I also used it when debugging compiler warnings and when checking whether my implementation matched the required protocol.
+
+One area where AI was especially useful was in explaining technical concepts in a structured way. For example, it helped me understand why a single recv() call cannot always be treated as one complete TCP message, and why file transfers need to track the exact number of bytes sent or received. It was also useful when I encountered the compiler warning related to the write_log() function, as it helped me identify that the function was being used before it had been declared.
+
+However, I did not treat the AI output as automatically correct. Some suggested code had to be adjusted to fit my personalised values, my existing program structure, and the exact assignment protocol. I compiled and tested each major feature separately, including authentication, SYSINFO, LISTPROC, allowed and rejected EXEC commands, PUT, GET, UDP monitoring, QUIT, logging, and multiple simultaneous Controller connections. I also verified the GET functionality using the cmp command to confirm that the downloaded file was identical to the original file.
+
+Through this assignment, I improved my understanding of practical network programming in C. I gained a better understanding of the relationship between socket(), bind(), listen(), accept(), connect(), send(), recv(), and sendto(). I also learned the difference between TCP and UDP in a practical context, how to handle simple protocol framing, how to implement restricted remote command execution, and how concurrency can be achieved using POSIX threads.
+
+The most important lesson for me was that understanding and testing the code is more important than simply obtaining a working output. Since the Lab Assessment and Viva require me to explain and modify my own implementation, I made sure to review the purpose of each major function and the reason behind the design choices used in the final RemoteOps system.

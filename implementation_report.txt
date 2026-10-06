@@ -1,0 +1,372 @@
+IMPLEMENTATION REPORT
+RemoteOps – Remote System Monitoring and Management Tool over TCP/IP
+
+Module: IE3090 – Network Programming
+Registration Number: IT24100623
+
+
+1. INTRODUCTION
+
+RemoteOps is a remote system monitoring and management tool implemented in C using the standard BSD sockets API. The system consists of two main programs: an Agent and a Controller.
+
+The Agent acts as the server and runs on the managed machine. The Controller acts as the client and connects to the Agent to perform authentication, obtain system information, list running processes, execute restricted commands, transfer files, and control periodic monitoring.
+
+TCP is used as the main reliable communication channel. UDP is used for periodic system-monitoring datagrams.
+
+
+2. PERSONALISED IMPLEMENTATION VALUES
+
+Registration Number: IT24100623
+Numeric Part: 24100623
+
+Agent TCP Port:
+7000 + 2410 = 9410
+
+Last Three Digits:
+623
+
+Agent Source File:
+agent_623.c
+
+Controller Source File:
+controller_623.c
+
+Makefile:
+Makefile_623
+
+Last Four Digits:
+0623
+
+Session ID:
+Reverse of 0623 = 3260
+
+SID:
+SID:3260
+
+Authentication Token:
+OPS-0623
+
+Log File:
+remoteops_IT24100623.log
+
+File Storage Path:
+./agentfiles/IT24100623/
+
+Submission Archive:
+IE3090_IT24100623.zip
+
+
+3. SYSTEM ARCHITECTURE
+
+RemoteOps follows a client/server architecture.
+
+Controller
+    |
+    | TCP connection – Port 9410
+    |
+    v
+Agent
+    |
+    |-- Authentication
+    |-- SYSINFO
+    |-- LISTPROC
+    |-- EXEC
+    |-- PUT
+    |-- GET
+    |-- Logging
+    |
+    | UDP monitoring
+    v
+Controller UDP Port
+
+The TCP channel is used for commands, responses, authentication, and file transfers. The UDP channel is used only for periodic monitoring data.
+
+
+4. CONCURRENCY MODEL
+
+POSIX threads were selected as the concurrency model.
+
+The Agent continuously accepts new TCP connections. After a Controller connection is accepted, a separate client-handling thread is created for that Controller.
+
+This approach allows multiple Controllers to remain connected and communicate with the Agent simultaneously.
+
+The implementation was tested with five simultaneous authenticated Controller connections.
+
+
+5. AUTHENTICATION
+
+Authentication is required before other commands are processed.
+
+The Controller sends:
+
+AUTH OPS-0623
+
+For the correct token, the Agent returns:
+
+OK AUTHENTICATED SID:3260
+
+For an incorrect token, the Agent returns:
+
+ERR 001 AUTH_FAILED SID:3260
+
+The implementation maintains an authentication state for each Controller connection.
+
+
+6. TCP FRAMING
+
+RemoteOps uses a line-based TCP protocol.
+
+Text commands end with a newline character.
+
+Because TCP is a byte-stream protocol, one recv() operation cannot be assumed to correspond to exactly one complete command.
+
+A receive-line function was therefore implemented to read data until a newline character is received.
+
+For PUT and GET operations, the implementation tracks the remaining number of bytes to ensure that exactly the announced file size is transferred.
+
+
+7. SYSINFO
+
+The SYSINFO command returns:
+
+- CPU load
+- Memory usage
+- System uptime
+- SID
+
+CPU load is obtained using /proc/loadavg.
+
+Memory usage and uptime are obtained using the Linux sysinfo() function.
+
+Example response:
+
+OK SYSINFO <cpu_load> <mem_used_mb> <uptime_sec> SID:3260
+
+
+8. LISTPROC
+
+The LISTPROC command returns a snapshot of currently running processes.
+
+The implementation uses popen() with the Linux ps command.
+
+Example response format:
+
+OK PROCS <process information> SID:3260
+
+
+9. EXEC COMMAND
+
+Remote command execution is restricted to the fixed whitelist specified by the assignment.
+
+Allowed commands:
+
+DATE
+UPTIME
+DISKFREE
+HOSTNAME
+WHOAMI
+
+Example:
+
+EXEC DATE
+
+Successful response:
+
+OK EXEC_RESULT <output> SID:3260
+
+Commands outside the whitelist are rejected.
+
+Example:
+
+EXEC LS
+
+Response:
+
+ERR 002 COMMAND_NOT_ALLOWED SID:3260
+
+
+10. PUT FILE UPLOAD
+
+The PUT command allows a Controller to upload a file.
+
+Format:
+
+PUT <filename> <filesize>
+
+The Agent stores uploaded files in:
+
+./agentfiles/IT24100623/
+
+The Agent uses a remaining-byte counter and repeated recv() operations until the complete file has been received.
+
+Successful response:
+
+OK FILE_RECEIVED <filename> SID:3260
+
+
+11. GET FILE DOWNLOAD
+
+The GET command allows a Controller to retrieve a previously uploaded file.
+
+Format:
+
+GET <filename>
+
+Successful response:
+
+OK FILE_SEND <filename> <filesize> SID:3260
+
+The response line is followed by the raw file bytes.
+
+The downloaded test file was compared with the original using:
+
+cmp test.txt downloaded_test.txt
+
+No output was produced by cmp, confirming that the files were byte-for-byte identical.
+
+
+12. UDP MONITORING
+
+Periodic system monitoring is started using:
+
+MONITOR START <udp_port>
+
+The Agent creates a monitoring thread and sends periodic UDP datagrams to the Controller.
+
+Datagram format:
+
+SYSINFO <cpu_load> <mem_used_mb> <uptime_sec> SID:3260
+
+The monitoring interval used in this implementation is 2 seconds.
+
+Monitoring is stopped using:
+
+MONITOR STOP
+
+Response:
+
+OK MONITOR_STOPPED SID:3260
+
+
+13. QUIT AND GRACEFUL DISCONNECT
+
+The Controller can terminate a session using:
+
+QUIT
+
+The Agent returns:
+
+OK BYE SID:3260
+
+Any active monitoring for the session is stopped before the TCP connection is closed.
+
+
+14. LOGGING
+
+The personalised log file is:
+
+remoteops_IT24100623.log
+
+The Agent records important events with timestamps, including:
+
+- Controller connections
+- Authentication events
+- Commands
+- File transfers
+- Monitoring activity
+- Disconnect events
+
+This provides evidence of Agent activity and supports debugging and testing.
+
+
+15. TESTING
+
+The following features were tested successfully:
+
+1. Agent startup
+2. Personalised port 9410
+3. Successful authentication
+4. Failed authentication
+5. SYSINFO
+6. LISTPROC
+7. Allowed EXEC command
+8. Rejected EXEC command
+9. PUT file upload
+10. GET file download
+11. File integrity using cmp
+12. UDP MONITOR START
+13. UDP MONITOR STOP
+14. Graceful QUIT
+15. Timestamped logging
+16. Five simultaneous Controller connections
+
+A separate testing summary is included in the project repository.
+
+
+16. IMPLEMENTATION EVIDENCE
+
+The final report should include the following screenshots:
+
+Screenshot 01 – Agent Startup
+Screenshot 02 – Personalised Port 9410 Listening
+Screenshot 03 – TCP Controller Connection
+Screenshot 04 – Successful Authentication
+Screenshot 05 – Failed Authentication
+Screenshot 06 – SYSINFO
+Screenshot 07 – LISTPROC
+Screenshot 08 – Allowed EXEC Command
+Screenshot 09 – Rejected EXEC Command
+Screenshot 10 – Successful PUT Upload
+Screenshot 11 – Successful GET Download
+Screenshot 12 – UDP Monitoring Stream
+Screenshot 13 – MONITOR STOP
+Screenshot 14 – Graceful QUIT
+Screenshot 15 – Personalised Log File
+Screenshot 16 – Five Simultaneous Controller Connections
+Screenshot 17 – Connection and Concurrency Code
+Screenshot 18 – Authentication Code
+Screenshot 19.1 – SYSINFO Code
+Screenshot 19.2 – LISTPROC Code
+Screenshot 20 – EXEC Whitelist Code
+Screenshot 21.1 – PUT Code
+Screenshot 21.2 – GET Code
+Screenshot 22.1 – UDP Monitoring Thread
+Screenshot 22.2 – MONITOR START Code
+Screenshot 22.3 – MONITOR STOP Code
+Screenshot 23 – Logging Function
+Screenshot 23B – QUIT Handler
+
+
+17. DESIGN RATIONALE
+
+TCP was selected for the main command channel because commands, responses, and file data require reliable and ordered delivery.
+
+UDP was used for periodic monitoring because individual monitoring updates are independent and the assignment specifically requires a secondary UDP monitoring channel.
+
+POSIX threads were selected for concurrency because they allow each Controller session to be handled independently without creating a separate Agent process.
+
+Remote command execution was restricted to the required whitelist for security and protocol compliance.
+
+Exact byte counting was used for file transfers because TCP does not preserve application-level message boundaries.
+
+
+18. ASSUMPTIONS
+
+The Agent and Controller are tested on a Linux environment.
+
+The Controller initially connects to the Agent using the loopback address 127.0.0.1 for local testing.
+
+Uploaded file names are expected to be valid file names.
+
+UDP monitoring uses a 2-second interval.
+
+The implementation follows the protocol and personalisation values specified in the assignment brief.
+
+
+19. CONCLUSION
+
+The RemoteOps system successfully implements the required TCP and UDP client/server functionality using C and the BSD sockets API.
+
+The final implementation supports authentication, system information retrieval, process listing, restricted remote command execution, file upload and download, periodic UDP monitoring, logging, graceful disconnection, and concurrent Controller connections.
+
+Testing confirmed that the personalised protocol values and mandatory functionality operate as expected for registration number IT24100623.

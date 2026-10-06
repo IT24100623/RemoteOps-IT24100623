@@ -1,0 +1,271 @@
+TESTING SUMMARY
+RemoteOps – Remote System Monitoring and Management Tool
+
+Module: IE3090 – Network Programming
+Registration Number: IT24100623
+
+1. Agent Startup and Port Binding
+Test:
+Start the Agent using ./agent_623.
+
+Expected Result:
+The Agent should create a TCP socket, bind to the personalised port 9410, and begin listening.
+
+Actual Result:
+The Agent started successfully and displayed that it was listening on port 9410.
+
+Status:
+PASS
+
+
+2. Personalised Port Verification
+Test:
+Run:
+
+ss -tlnp | grep 9410
+
+Expected Result:
+Port 9410 should be shown in the LISTEN state.
+
+Actual Result:
+Port 9410 was displayed as an active listening TCP port.
+
+Status:
+PASS
+
+
+3. Successful Authentication
+Test:
+Send:
+
+AUTH OPS-0623
+
+Expected Result:
+The Agent should return:
+
+OK AUTHENTICATED SID:3260
+
+Actual Result:
+The expected authentication success response was received.
+
+Status:
+PASS
+
+
+4. Failed Authentication
+Test:
+Send an incorrect authentication token.
+
+Expected Result:
+The Agent should return:
+
+ERR 001 AUTH_FAILED SID:3260
+
+Actual Result:
+The invalid authentication attempt was rejected correctly.
+
+Status:
+PASS
+
+
+5. SYSINFO
+Test:
+Send:
+
+SYSINFO
+
+Expected Result:
+The Agent should return CPU load, used memory, uptime, and SID:3260.
+
+Actual Result:
+The Agent returned current system information in the required format.
+
+Status:
+PASS
+
+
+6. LISTPROC
+Test:
+Send:
+
+LISTPROC
+
+Expected Result:
+The Agent should return a snapshot of running processes.
+
+Actual Result:
+A process list containing process IDs and names was returned successfully.
+
+Status:
+PASS
+
+
+7. Allowed EXEC Command
+Test:
+Send:
+
+EXEC DATE
+
+Expected Result:
+The Agent should execute the allowed DATE command and return the result.
+
+Actual Result:
+The date output was returned successfully with SID:3260.
+
+Status:
+PASS
+
+
+8. Rejected EXEC Command
+Test:
+Send:
+
+EXEC LS
+
+Expected Result:
+The Agent should reject the command because it is not included in the fixed whitelist.
+
+Expected Response:
+
+ERR 002 COMMAND_NOT_ALLOWED SID:3260
+
+Actual Result:
+The command was rejected with the expected error response.
+
+Status:
+PASS
+
+
+9. PUT File Upload
+Test:
+Upload test.txt using the PUT command.
+
+Expected Result:
+The Agent should receive exactly the announced file size and store the file under:
+
+./agentfiles/IT24100623/
+
+Actual Result:
+test.txt was uploaded successfully and stored in the personalised storage directory.
+
+Status:
+PASS
+
+
+10. GET File Download
+Test:
+Request the previously uploaded test.txt file using GET.
+
+Expected Result:
+The Agent should return the file header and transfer the exact file bytes.
+
+Actual Result:
+The file was downloaded successfully as downloaded_test.txt.
+
+Status:
+PASS
+
+
+11. File Integrity Check
+Test:
+Run:
+
+cmp test.txt downloaded_test.txt
+
+Expected Result:
+No output should be produced if both files are byte-for-byte identical.
+
+Actual Result:
+The command produced no output, confirming that the files were identical.
+
+Status:
+PASS
+
+
+12. UDP Monitoring Start
+Test:
+Send:
+
+MONITOR START 9500
+
+Expected Result:
+The Agent should confirm that monitoring has started and send periodic SYSINFO-style UDP datagrams to the Controller.
+
+Actual Result:
+The Controller received repeated UDP monitoring messages containing system statistics and SID:3260.
+
+Status:
+PASS
+
+
+13. UDP Monitoring Stop
+Test:
+Send:
+
+MONITOR STOP
+
+Expected Result:
+The Agent should stop sending UDP monitoring messages and return:
+
+OK MONITOR_STOPPED SID:3260
+
+Actual Result:
+The UDP monitoring stream stopped successfully.
+
+Status:
+PASS
+
+
+14. Graceful QUIT
+Test:
+Send:
+
+QUIT
+
+Expected Result:
+The Agent should return:
+
+OK BYE SID:3260
+
+and close the Controller connection cleanly.
+
+Actual Result:
+The response was received and the session closed without crashing the Agent.
+
+Status:
+PASS
+
+
+15. Logging
+Test:
+Inspect:
+
+remoteops_IT24100623.log
+
+Expected Result:
+The log should contain timestamped records of connections, commands, authentication events, file transfers, monitoring activity, and disconnects.
+
+Actual Result:
+The expected events were recorded with timestamps.
+
+Status:
+PASS
+
+
+16. Multiple Simultaneous Controller Connections
+Test:
+Open five separate Controller connections using netcat and authenticate each connection.
+
+Expected Result:
+The Agent should accept and serve at least five Controller connections simultaneously.
+
+Actual Result:
+Five Controller sessions connected and authenticated successfully while remaining open.
+
+Status:
+PASS
+
+
+FINAL TEST RESULT
+
+All mandatory RemoteOps features tested above produced the expected results during local testing on the Ubuntu virtual machine.
